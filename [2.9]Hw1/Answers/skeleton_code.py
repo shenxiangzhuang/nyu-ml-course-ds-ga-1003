@@ -357,8 +357,8 @@ def stochastic_grad_descent(X,
                 if alpha is a float, then the step size
                 in every step is the float.
 
-                if alpha == "1/sqrt(t)", alpha = 1/sqrt(t).
-                if alpha == "1/t", alpha = 1/t.
+                if alpha == "0.1/sqrt(t)", alpha = 0.1/sqrt(t).
+                if alpha == "0.1/t", alpha = 0.1/t.
         lambda_reg - the regularization coefficient
         num_epoch - number of epochs to go through the whole training set
 
@@ -383,22 +383,22 @@ def stochastic_grad_descent(X,
         theta_hist[i, ] = theta
         loss_hist[i] = compute_square_loss(X, y, theta) +\
             lambda_reg * (theta.T @ theta)
-        if alpha == '1/sqrt(t)':
-            step_size = 1.0 / np.sqrt(i + 1.0)
-        elif alpha == '1/t':
-            step_size = 1.0 / (i + 1.0)
+        if alpha == '0.1/sqrt(t)':
+            step_size = 0.1 / np.sqrt(i + 1.0)
+        elif alpha == '0.1/t':
+            step_size = 0.1 / (i + 1.0)
         else:
             step_size = alpha
         xi = X[np.random.randint(0, num_instances), ].reshape((-1, 1))
         yi = y[np.random.randint(0, num_instances)]
 
         theta -= step_size * ((theta.T @ xi - yi) @ xi.T +
-                              4 * num_instances * lambda_reg * theta.T)
+                              4 * lambda_reg * theta.T)
     return theta_hist, loss_hist
 
 
 # choose step size
-# alphas = [0.05, 0.005, '1/t', '1/sqrt(t)']
+# alphas = [0.005, 0.05, '0.1/t', '0.1/sqrt(t)']
 def plot_sgd_step_size(X, y, alphas):
     for alpha in alphas:
         _, loss_hist = stochastic_grad_descent(X, y, alpha)
