@@ -22,13 +22,7 @@ def likelihood_func(w, X, y_train, likelihood_var):
     n = len(y_train)
     v = (y_train - X @ w).reshape(-1, 1)
     s = (v.T @ v) / (-2 * likelihood_var)
-    # avoid np.exp's overflow
-    i = 1
-    while s <= -36 or s >= 709:
-        s /= 2
-        i += 1
-    likelihood = np.power(2 * np.pi * likelihood_var, - n / 2) *\
-        np.power(np.exp(s), i)
+    likelihood = np.power(2 * np.pi * likelihood_var, - n / 2) * np.exp(s)
     return likelihood[0, 0]
 
 
